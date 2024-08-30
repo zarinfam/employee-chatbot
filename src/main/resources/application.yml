@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: employee-chatbot
+
+  ai:
+    openai:
+      api-key: ${OPENAI-API-KEY}
