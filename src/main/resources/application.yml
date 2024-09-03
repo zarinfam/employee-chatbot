@@ -5,3 +5,12 @@ spring:
   ai:
     openai:
       api-key: ${OPENAI-API-KEY}
+    chat:
+      client:
+        observations:
+          include-input: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
