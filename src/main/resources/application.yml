@@ -5,3 +5,8 @@ spring:
   ai:
     openai:
       api-key: ${OPENAI-API-KEY}
+
+    ollama:
+      chat:
+        options:
+          model: llama3.1
