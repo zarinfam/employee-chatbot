@@ -14,20 +14,14 @@ public class ChatbotService {
     private final ChatClient chatClient;
 
     ChatbotService(ChatClient.Builder chatClientBuilder, ChatMemory chatMemory) {
-        this.chatClient = chatClientBuilder
-                .defaultAdvisors(new MessageChatMemoryAdvisor(chatMemory))
-                .build();
+        this.chatClient = chatClientBuilder.defaultAdvisors(new MessageChatMemoryAdvisor(chatMemory)).build();
     }
 
     public String chat(String chatId, String userMessage) {
-        return chatClient
-                .prompt()
-                .user(userMessage)
-                .advisors(a -> a
-                        .param(CHAT_MEMORY_CONVERSATION_ID_KEY, chatId)
-                        .param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 50))
-                .call()
-                .content();
+        return chatClient.prompt().user(userMessage)
+            .advisors(a -> a.param(CHAT_MEMORY_CONVERSATION_ID_KEY, chatId)
+                .param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 50))
+            .call().content();
     }
 
 }
