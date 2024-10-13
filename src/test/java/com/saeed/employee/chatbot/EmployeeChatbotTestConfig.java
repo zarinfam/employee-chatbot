@@ -13,7 +13,6 @@ public class EmployeeChatbotTestConfig {
     @ServiceConnection
     OllamaContainer ollamaContainer() {
         return new OllamaContainer(DockerImageName.parse("ghcr.io/thomasvitale/ollama-llama3-1")
-            .asCompatibleSubstituteFor("ollama/ollama"));
+                .asCompatibleSubstituteFor("ollama/ollama"));
     }
-
 }

@@ -1,13 +1,13 @@
 package com.saeed.employee.chatbot.api;
 
+import com.saeed.employee.chatbot.api.model.UserMessage;
+import com.saeed.employee.chatbot.service.ChatbotService;
+
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.saeed.employee.chatbot.api.model.UserMessage;
-import com.saeed.employee.chatbot.service.ChatbotService;
 
 @RestController
 @RequestMapping("/employee")
@@ -23,5 +23,4 @@ public class ChatbotController {
     public String chat(@PathVariable String chatId, @RequestBody UserMessage userMessage) {
         return chatbotService.chat(chatId, userMessage.text());
     }
-
 }

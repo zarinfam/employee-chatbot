@@ -6,6 +6,7 @@ public class LocalEmployeeChatbot {
 
     public static void main(String[] args) {
         SpringApplication.from(EmployeeChatbotApplication::main)
-            .with(EmployeeChatbotTestConfig.class).run(args);
+                .with(EmployeeChatbotTestConfig.class)
+                .run(args);
     }
 }

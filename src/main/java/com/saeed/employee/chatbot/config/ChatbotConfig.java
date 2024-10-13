@@ -12,5 +12,4 @@ public class ChatbotConfig {
     ChatMemory chatMemory() {
         return new InMemoryChatMemory();
     }
-
 }
