@@ -3,10 +3,7 @@ spring:
     name: employee-chatbot
 
   ai:
-    openai:
-      api-key: ${OPENAI-API-KEY}
-
     ollama:
       chat:
         options:
-          model: llama3.1
+          model: deepseek-r1:1.5b
