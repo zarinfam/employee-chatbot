@@ -1,12 +1,13 @@
 spring:
   application:
     name: employee-chatbot
-
   ai:
-    openai:
-      api-key: ${OPENAI-API-KEY}
-
     ollama:
+      init:
+        pull-model-strategy: when_missing            
       chat:
         options:
           model: llama3.1
+      embedding:
+        options:
+          model: nomic-embed-text
