@@ -25,6 +25,55 @@ class EmployeeChatbotApplicationTests {
     @Autowired
     private WebTestClient webTestClient;
 
+
+    // Unique identifiers for test isolation
+    private static final String EMPLOYEE_UNKNOWN = "employee_unknown";
+    private static final String EMPLOYEE_KNOWN = "employee_known";
+
+    @Test
+    public void chatWithUnknownEmployee_ShouldReturnUnknownMessage() {
+        // Given:
+        String query = "what is my name? Just answer me with I don't know if you don't know and just my name if know";
+
+        // When: we request a chat for an unknown employee
+        webTestClient
+                .post()
+                .uri(uriBuilder -> uriBuilder.path("/employee/chat/" + EMPLOYEE_UNKNOWN).build())
+                .body(Mono.just(new UserMessage(query)), UserMessage.class)
+                .exchange()
+                // Then: the response should indicate the name is unknown
+                .expectStatus().isOk()
+                .expectBody(String.class)
+                .value(result -> assertThat(result.toLowerCase()).contains("i don't know"));
+    }
+
+    @Test
+    public void chatWithKnownEmployee_ShouldReturnEmployeeName() {
+        // Given:
+        String setNameQuery = "My name is Deli";
+        String query = "what is my name? Just answer me with I don't know if you don't know and just my name if know";
+
+        // Setup:
+        webTestClient
+                .post()
+                .uri(uriBuilder -> uriBuilder.path("/employee/chat/" + EMPLOYEE_KNOWN).build())
+                .body(Mono.just(new UserMessage(setNameQuery)), UserMessage.class)
+                .exchange()
+                .expectStatus().isOk();
+
+        // When:
+        webTestClient
+                .post()
+                .uri(uriBuilder -> uriBuilder.path("/employee/chat/" + EMPLOYEE_KNOWN).build())
+                .body(Mono.just(new UserMessage(query)), UserMessage.class)
+                .exchange()
+                // Then:
+                .expectStatus().isOk()
+                .expectBody(String.class)
+                .value(result -> assertThat(result).contains("Deli"));
+    }
+
+
     @Test
     @Order(1)
     void chatWithUnknownEmployee_success() {

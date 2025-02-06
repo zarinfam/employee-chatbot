@@ -9,10 +9,16 @@ import org.testcontainers.utility.DockerImageName;
 @TestConfiguration(proxyBeanMethods = false)
 public class EmployeeChatbotTestConfig {
 
-    @Bean
-    @ServiceConnection
-    OllamaContainer ollamaContainer() {
-        return new OllamaContainer(DockerImageName.parse("ghcr.io/thomasvitale/ollama-llama3-1")
-                .asCompatibleSubstituteFor("ollama/ollama"));
+
+    static {
+        // Disable the default Testcontainers Ryuk container to avoid Docker image pull issues
+        System.setProperty("TESTCONTAINERS_RYUK_DISABLED", "true");
     }
+
+//    @Bean
+//    @ServiceConnection
+//    OllamaContainer ollamaContainer() {
+//        return new OllamaContainer(DockerImageName.parse("ghcr.io/thomasvitale/ollama-llama3-1")
+//                .asCompatibleSubstituteFor("ollama/ollama"));
+//    }
 }
