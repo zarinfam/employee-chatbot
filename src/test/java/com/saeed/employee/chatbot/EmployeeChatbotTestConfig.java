@@ -10,15 +10,10 @@ import org.testcontainers.utility.DockerImageName;
 public class EmployeeChatbotTestConfig {
 
 
-    static {
-        // Disable the default Testcontainers Ryuk container to avoid Docker image pull issues
-        System.setProperty("TESTCONTAINERS_RYUK_DISABLED", "true");
+    @Bean
+    @ServiceConnection
+    OllamaContainer ollamaContainer() {
+        return new OllamaContainer(DockerImageName.parse("ghcr.io/thomasvitale/ollama-llama3-1")
+                .asCompatibleSubstituteFor("ollama/ollama"));
     }
-
-//    @Bean
-//    @ServiceConnection
-//    OllamaContainer ollamaContainer() {
-//        return new OllamaContainer(DockerImageName.parse("ghcr.io/thomasvitale/ollama-llama3-1")
-//                .asCompatibleSubstituteFor("ollama/ollama"));
-//    }
 }
