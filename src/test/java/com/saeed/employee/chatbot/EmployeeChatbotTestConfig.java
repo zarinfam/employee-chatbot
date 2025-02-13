@@ -9,6 +9,7 @@ import org.testcontainers.utility.DockerImageName;
 @TestConfiguration(proxyBeanMethods = false)
 public class EmployeeChatbotTestConfig {
 
+
     @Bean
     @ServiceConnection
     OllamaContainer ollamaContainer() {
