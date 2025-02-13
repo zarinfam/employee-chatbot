@@ -4,7 +4,8 @@ spring:
   ai:
     ollama:
       init:
-        pull-model-strategy: when_missing            
+        pull-model-strategy: when_missing
+        timeout: 6000s            
       chat:
         options:
           model: llama3.1

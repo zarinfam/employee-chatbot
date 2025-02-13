@@ -15,19 +15,19 @@ import org.springframework.stereotype.Component;
 import jakarta.annotation.PostConstruct;
 
 @Component
-class RuleEtl {
+class VectorDatabaseInitializer {
 
     private final VectorStore vectorStore;
 
     @Value("classpath:rules/rules1.txt")
     Resource rules1;
 
-    RuleEtl(VectorStore vectorStore) {
+    VectorDatabaseInitializer(VectorStore vectorStore) {
         this.vectorStore = vectorStore;
     }
 
     @PostConstruct
-    void run() {
+    void init() {
         List<Document> documents = new ArrayList<>();
 
         var textReader = new TextReader(rules1);
