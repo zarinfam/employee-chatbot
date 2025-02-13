@@ -16,7 +16,9 @@ public class ChatbotService {
 
     private final ChatClient chatClient;
 
-    ChatbotService(ChatClient.Builder chatClientBuilder, ChatMemory chatMemory,
+    ChatbotService(
+            ChatClient.Builder chatClientBuilder,
+            ChatMemory chatMemory,
             RetrievalAugmentationAdvisor RagAdvisor,
             @Value("classpath:/prompts/system-prompt.st") Resource systemPromptResource) {
         this.chatClient = chatClientBuilder

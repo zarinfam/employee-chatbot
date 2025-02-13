@@ -1,8 +1,6 @@
 package com.saeed.employee.chatbot.service;
 
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.annotation.PostConstruct;
 
 import org.springframework.ai.document.Document;
 import org.springframework.ai.reader.TextReader;
@@ -12,7 +10,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
-import jakarta.annotation.PostConstruct;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 class VectorDatabaseInitializer {
@@ -40,5 +40,4 @@ class VectorDatabaseInitializer {
 
         vectorStore.add(transformedDocuments);
     }
-
 }
