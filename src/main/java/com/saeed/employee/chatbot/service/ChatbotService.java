@@ -5,7 +5,10 @@ import static org.springframework.ai.chat.client.advisor.AbstractChatMemoryAdvis
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+import org.springframework.ai.chat.client.advisor.RetrievalAugmentationAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,9 +16,14 @@ public class ChatbotService {
 
     private final ChatClient chatClient;
 
-    ChatbotService(ChatClient.Builder chatClientBuilder, ChatMemory chatMemory) {
+    ChatbotService(
+            ChatClient.Builder chatClientBuilder,
+            ChatMemory chatMemory,
+            RetrievalAugmentationAdvisor RagAdvisor,
+            @Value("classpath:/prompts/system-prompt.st") Resource systemPromptResource) {
         this.chatClient = chatClientBuilder
-                .defaultAdvisors(new MessageChatMemoryAdvisor(chatMemory))
+                .defaultAdvisors(new MessageChatMemoryAdvisor(chatMemory), RagAdvisor)
+                .defaultSystem(systemPromptResource)
                 .build();
     }
 
