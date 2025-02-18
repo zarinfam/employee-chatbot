@@ -35,3 +35,10 @@ build/
 
 .env
 .gitpod.yml
+
+.DS_Store
+
+node_modules/
+frontend/generated/
+pnpmfile.js
+vite.generated.ts
