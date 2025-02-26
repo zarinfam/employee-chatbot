@@ -10,6 +10,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 
 import java.time.Instant;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -22,6 +23,7 @@ public class ChatView extends VerticalLayout {
     private final MessageList messageList = new MessageList();
     private final List<MessageListItem> messages = new ArrayList<>();
     private final String conversationId = UUID.randomUUID().toString();
+    private Instant lastMessageTime;
 
     public ChatView(ChatbotService chatbotService) {
         this.chatbotService = chatbotService;
@@ -34,6 +36,7 @@ public class ChatView extends VerticalLayout {
 
         messageInput.addSubmitListener(submitEvent -> {
             String userMessage = submitEvent.getValue();
+            lastMessageTime = Instant.now();
             addUserMessage(userMessage);
             getBotResponse(userMessage);
         });
@@ -50,7 +53,11 @@ public class ChatView extends VerticalLayout {
 
     private void getBotResponse(String userMessage) {
         String response = chatbotService.chat(conversationId, userMessage);
-        MessageListItem botMessage = new MessageListItem(response, Instant.now(), "Bot");
+        Instant now = Instant.now();
+        double elapsedSeconds = Duration.between(lastMessageTime, now).toMillis() / 1000.0;
+        
+        String responseWithTime = String.format("%s\n\n(Response time: %.2f seconds)", response, elapsedSeconds);
+        MessageListItem botMessage = new MessageListItem(responseWithTime, now, "Bot");
         botMessage.setUserColorIndex(2);
         messages.add(botMessage);
         messageList.setItems(messages);
