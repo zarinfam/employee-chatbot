@@ -27,12 +27,31 @@ public class ChatView extends VerticalLayout {
 
     public ChatView(ChatbotService chatbotService) {
         this.chatbotService = chatbotService;
-        setSizeFull();
+        setWidth("100%");
+        setHeight(null); // Allow height to be determined by content
+        setPadding(true);
         setSpacing(false);
-
-        messageList.setSizeFull();
+        setAlignItems(Alignment.CENTER);
+        
+        // Configure message list
+        messageList.setWidth("100%");
+        messageList.setHeight(null); // Allow height to be determined by content
+        
+        // Configure message input
         MessageInput messageInput = new MessageInput();
-        messageInput.setWidthFull();
+        messageInput.setWidth("100%");
+        messageInput.getStyle()
+                .set("margin-top", "var(--lumo-space-s)")
+                .set("max-width", "800px"); // Limit width for better readability
+
+        // Create container for chat components
+        VerticalLayout chatContainer = new VerticalLayout(messageList, messageInput);
+        chatContainer.setWidth("100%");
+        chatContainer.setHeight(null);
+        chatContainer.setPadding(false);
+        chatContainer.setSpacing(false);
+        chatContainer.setDefaultHorizontalComponentAlignment(Alignment.CENTER);
+        chatContainer.setMaxWidth("800px"); // Limit width for better readability
 
         messageInput.addSubmitListener(submitEvent -> {
             String userMessage = submitEvent.getValue();
@@ -41,7 +60,7 @@ public class ChatView extends VerticalLayout {
             getBotResponse(userMessage);
         });
 
-        add(messageList, messageInput);
+        add(chatContainer);
     }
 
     private void addUserMessage(String text) {
