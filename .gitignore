@@ -35,3 +35,15 @@ build/
 
 .env
 .gitpod.yml
+
+### Vaadin ###
+/frontend/generated/
+/frontend/index.html
+/vaadin-dev-server-settings.json
+node_modules/
+package.json
+package-lock.json
+vite.config.ts
+vite.generated.ts
+types.d.ts
+tsconfig.json
