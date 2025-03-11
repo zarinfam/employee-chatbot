@@ -18,18 +18,18 @@ public class ChatbotConfig {
         return new InMemoryChatMemory();
     }
 
-    @Bean
-    VectorStore vectorStore(EmbeddingModel embeddingModel) {
-        return SimpleVectorStore.builder(embeddingModel).build();
-    }
+    // @Bean
+    // VectorStore vectorStore(EmbeddingModel embeddingModel) {
+    //     return SimpleVectorStore.builder(embeddingModel).build();
+    // }
 
-    @Bean
-    RetrievalAugmentationAdvisor RagAdvisor(VectorStore vectorStore) {
-        return RetrievalAugmentationAdvisor.builder()
-                .documentRetriever(VectorStoreDocumentRetriever.builder()
-                        .similarityThreshold(0.50)
-                        .vectorStore(vectorStore)
-                        .build())
-                .build();
-    }
+    // @Bean
+    // RetrievalAugmentationAdvisor RagAdvisor(VectorStore vectorStore) {
+    //     return RetrievalAugmentationAdvisor.builder()
+    //             .documentRetriever(VectorStoreDocumentRetriever.builder()
+    //                     .similarityThreshold(0.50)
+    //                     .vectorStore(vectorStore)
+    //                     .build())
+    //             .build();
+    // }
 }

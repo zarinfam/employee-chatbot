@@ -19,11 +19,11 @@ public class ChatbotService {
     ChatbotService(
             ChatClient.Builder chatClientBuilder,
             ChatMemory chatMemory,
-            RetrievalAugmentationAdvisor RagAdvisor,
+        //     RetrievalAugmentationAdvisor RagAdvisor,
             @Value("classpath:/prompts/system-prompt.st") Resource systemPromptResource) {
         this.chatClient = chatClientBuilder
-                .defaultAdvisors(new MessageChatMemoryAdvisor(chatMemory), RagAdvisor)
-                .defaultSystem(systemPromptResource)
+                .defaultAdvisors(new MessageChatMemoryAdvisor(chatMemory))
+                // .defaultSystem(systemPromptResource)
                 .build();
     }
 

@@ -2,13 +2,9 @@ spring:
   application:
     name: employee-chatbot
   ai:
-    ollama:
-      init:
-        pull-model-strategy: when_missing
-        timeout: 6000s            
+    openai:
+      api-key: lm-studio
+      base-url: http://localhost:1234
       chat:
         options:
-          model: llama3.1
-      embedding:
-        options:
-          model: nomic-embed-text
+          model: meta-llama-3.1-8b-instruct

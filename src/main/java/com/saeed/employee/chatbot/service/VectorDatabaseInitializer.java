@@ -14,7 +14,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+// @Component
 class VectorDatabaseInitializer {
 
     private final VectorStore vectorStore;
