@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.ai.chat.model.ChatResponse;
+
 @Route(value = "chat", layout = MainLayout.class)
 @RouteAlias(value = "", layout = MainLayout.class)
 @PageTitle("Chat")
@@ -71,11 +73,18 @@ public class ChatView extends VerticalLayout {
     }
 
     private void getBotResponse(String userMessage) {
-        String response = chatbotService.chat(conversationId, userMessage);
+        ChatResponse chatResponse = chatbotService.chat(conversationId, userMessage);
+
+        String response = chatResponse.getResult().getOutput().getText();
         Instant now = Instant.now();
         double elapsedSeconds = Duration.between(lastMessageTime, now).toMillis() / 1000.0;
+        long totalTokens = chatResponse.getMetadata().getUsage().getGenerationTokens();
+
+        double tokPerSec = totalTokens / elapsedSeconds;
         
-        String responseWithTime = String.format("%s\n\n(Response time: %.2f seconds)", response, elapsedSeconds);
+        String responseWithTime = String.format(
+            "%s\n\n(%.2f tok/sec - %d tokens - Response time: %.2f seconds)"
+            , response, tokPerSec, totalTokens, elapsedSeconds);
         MessageListItem botMessage = new MessageListItem(responseWithTime, now, "Bot");
         botMessage.setUserColorIndex(2);
         messages.add(botMessage);
