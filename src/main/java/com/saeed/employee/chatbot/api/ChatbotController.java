@@ -21,6 +21,6 @@ public class ChatbotController {
 
     @PostMapping("/chat/{chatId}")
     public String chat(@PathVariable String chatId, @RequestBody UserMessage userMessage) {
-        return chatbotService.chat(chatId, userMessage.text()).getResult().getOutput().getText();
+        return chatbotService.chat(chatId, userMessage.text());
     }
 }

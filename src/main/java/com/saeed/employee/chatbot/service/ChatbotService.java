@@ -22,13 +22,26 @@ public class ChatbotService {
                 .build();
     }
 
-    public ChatResponse chat(String chatId, String userMessage) {
-         return chatClient
+    public String chat(String chatId, String userMessage) {
+        long startTime = System.currentTimeMillis();
+        ChatResponse chatResponse = chatClient
                 .prompt()
                 .user(userMessage)
                 .advisors(a -> a.param(CHAT_MEMORY_CONVERSATION_ID_KEY, chatId)
                         .param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 50))
                 .call()
                 .chatResponse();
+
+        long endTime = System.currentTimeMillis();
+
+        String response = chatResponse.getResult().getOutput().getText();
+        double elapsedSeconds = (endTime - startTime) / 1000;
+        long totalTokens = chatResponse.getMetadata().getUsage().getGenerationTokens();
+
+        double tokPerSec = totalTokens / elapsedSeconds;
+        
+        return String.format(
+            "%s\n\n(%.2f tok/sec - %d tokens - Response time: %.2f seconds)"
+            , response, tokPerSec, totalTokens, elapsedSeconds);                
     }
 }
