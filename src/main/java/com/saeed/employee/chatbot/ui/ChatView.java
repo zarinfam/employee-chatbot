@@ -14,10 +14,10 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 
 import java.time.Instant;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Route(value = "chat", layout = MainLayout.class)
 @RouteAlias(value = "", layout = MainLayout.class)
@@ -82,16 +82,21 @@ public class ChatView extends VerticalLayout {
             UI ui = getUI().orElseThrow();
             
             // Use chatAsync for streaming response
+            final var startTime = System.currentTimeMillis();
+            final var totalTokens = new AtomicLong(0);
             chatbotService.chatAsync(conversationId, userMessage)
                     .doOnComplete(() -> {
                         ui.access(() -> {
-                            Instant now = Instant.now();
-                            double elapsedSeconds = Duration.between(lastMessageTime, now).toMillis() / 1000.0;
+                            final var endTime = System.currentTimeMillis();
+                            double elapsedSeconds = (double) (endTime - startTime) / 1000;
+                            double tokPerSec = totalTokens.get() / elapsedSeconds;
+
                             // Add response time to the last bot message
                             if (!messages.isEmpty()) {
                                 MessageListItem lastMessage = messages.get(messages.size() - 1);
-                                String updatedContent = String.format("%s\n\n(Response time: %.2f seconds)", 
-                                    lastMessage.getText(), elapsedSeconds);
+                                String updatedContent = String.format(
+                                    "%s\n\n(%.2f tok/sec - %d tokens - Response time: %.2f seconds)"
+                                    , lastMessage.getText(), tokPerSec, totalTokens.get(), elapsedSeconds);
                                 lastMessage.setText(updatedContent);
                                 messageList.setItems(messages);
                             }
@@ -110,6 +115,7 @@ public class ChatView extends VerticalLayout {
                     .subscribe(response -> {
                         ui.access(() -> {
                             // For streaming responses, update or add bot message
+                            totalTokens.set(response.getMetadata().getUsage().getCompletionTokens());
                             response.getResults().forEach(result -> {
                                 String content = result.getOutput().getText();
                                 currentResponse.append(content);
