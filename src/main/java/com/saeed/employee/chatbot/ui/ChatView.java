@@ -23,17 +23,14 @@ import java.util.concurrent.atomic.AtomicLong;
 @RouteAlias(value = "", layout = MainLayout.class)
 @PageTitle("Chat")
 public class ChatView extends VerticalLayout {
-    private final ChatbotService chatbotService;
     private final MessageList messageList = new MessageList();
     private final List<MessageListItem> messages = new ArrayList<>();
     private final String conversationId = UUID.randomUUID().toString();
-    private Instant lastMessageTime;
     private final ProgressBar progressBar;
     private final MessageInput messageInput;
     private StringBuilder currentResponse = new StringBuilder();
 
     public ChatView(ChatbotService chatbotService) {
-        this.chatbotService = chatbotService;
         setWidth("100%");
         setHeight(null);
         setPadding(true);
@@ -71,7 +68,6 @@ public class ChatView extends VerticalLayout {
 
         messageInput.addSubmitListener(submitEvent -> {
             String userMessage = submitEvent.getValue();
-            lastMessageTime = Instant.now();
             currentResponse.setLength(0); // Reset current response
             addUserMessage(userMessage);
             
