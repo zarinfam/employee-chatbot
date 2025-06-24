@@ -111,7 +111,7 @@ public class ChatView extends VerticalLayout {
                         ui.access(() -> {
                             // For streaming responses, update or add bot message
                             response.getResults().forEach(result -> {
-                                String content = result.getOutput().getContent();
+                                String content = result.getOutput().getText();
                                 currentResponse.append(content);
                             });
                             

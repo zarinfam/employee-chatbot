@@ -1,12 +1,12 @@
 package com.saeed.employee.chatbot.service;
 
-import static org.springframework.ai.chat.client.advisor.AbstractChatMemoryAdvisor.CHAT_MEMORY_CONVERSATION_ID_KEY;
-import static org.springframework.ai.chat.client.advisor.AbstractChatMemoryAdvisor.CHAT_MEMORY_RETRIEVE_SIZE_KEY;
+import static org.springframework.ai.chat.client.advisor.vectorstore.VectorStoreChatMemoryAdvisor.TOP_K;
+import static org.springframework.ai.chat.memory.ChatMemory.CONVERSATION_ID;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.rag.advisor.RetrievalAugmentationAdvisor;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
-import org.springframework.ai.chat.client.advisor.RetrievalAugmentationAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -22,10 +22,10 @@ public class ChatbotService {
     ChatbotService(
             ChatClient.Builder chatClientBuilder,
             ChatMemory chatMemory,
-            RetrievalAugmentationAdvisor RagAdvisor,
+            RetrievalAugmentationAdvisor ragAdvisor,
             @Value("classpath:/prompts/system-prompt.st") Resource systemPromptResource) {
         this.chatClient = chatClientBuilder
-                .defaultAdvisors(new MessageChatMemoryAdvisor(chatMemory), RagAdvisor)
+                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build(), ragAdvisor)
                 .defaultSystem(systemPromptResource)
                 .build();
     }
@@ -34,8 +34,8 @@ public class ChatbotService {
         return chatClient
                 .prompt()
                 .user(userMessage)
-                .advisors(a -> a.param(CHAT_MEMORY_CONVERSATION_ID_KEY, chatId)
-                        .param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 50))
+                .advisors(a -> a.param(CONVERSATION_ID, chatId)
+                        .param(TOP_K, 50))
                 .call()
                 .content();
     }
@@ -44,8 +44,8 @@ public class ChatbotService {
         return chatClient
                 .prompt()
                 .user(userMessage)
-                .advisors(a -> a.param(CHAT_MEMORY_CONVERSATION_ID_KEY, chatId)
-                        .param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 50))
+                .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, chatId)
+                        .param(TOP_K, 50))
                 .stream()
                 .chatResponse();
     }    
